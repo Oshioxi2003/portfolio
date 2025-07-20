@@ -18,9 +18,9 @@ RUN apt-get update \
         && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY requirements.txt constraints.txt ./
+COPY requirements.txt  ./
 RUN pip install --no-cache-dir --upgrade pip==24.0 setuptools==69.5.1 wheel==0.42.0 \
-    && pip install --no-cache-dir -c constraints.txt -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
 COPY . .
