@@ -7,8 +7,8 @@ echo "🚀 Starting Render build process..."
 
 # Install dependencies
 echo "📦 Installing Python dependencies..."
-pip install --upgrade pip
-pip install -r requirements.txt
+pip install --upgrade pip==24.0 setuptools==69.5.1 wheel==0.42.0
+pip install --no-cache-dir -c constraints.txt -r requirements.txt
 
 # Set database path to persistent disk
 export DB_PATH="/app/data/db.sqlite3"

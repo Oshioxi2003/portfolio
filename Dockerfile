@@ -1,5 +1,5 @@
 # Render Deployment Dockerfile
-FROM python:3.11-slim
+FROM python:3.11.9-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Set work directory
 WORKDIR /app
 
-# Install system dependencies (minimal for SQLite)
+# Install system dependencies
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
@@ -18,9 +18,9 @@ RUN apt-get update \
         && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt constraints.txt ./
+RUN pip install --no-cache-dir --upgrade pip==24.0 setuptools==69.5.1 wheel==0.42.0 \
+    && pip install --no-cache-dir -c constraints.txt -r requirements.txt
 
 # Copy project files
 COPY . .
@@ -39,5 +39,5 @@ USER renderuser
 # Expose port (Render assigns PORT automatically)
 EXPOSE $PORT
 
-# Start command (Render will override this with gunicorn)
+# Start command
 CMD gunicorn --bind 0.0.0.0:$PORT --workers 2 --timeout 120 portfolio_site.wsgi:application 
