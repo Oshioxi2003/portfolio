@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: oshioxi-portfolio
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn --bind 0.0.0.0:$PORT --workers 2 --timeout 120 portfolio_site.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: RENDER
+        value: true
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: oshioxi-portfolio.onrender.com,*.onrender.com
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: admin@oshioxi.site
+      - key: DJANGO_SUPERUSER_PASSWORD
+        generateValue: true
+    disk:
+      name: portfolio-data
+      mountPath: /app/data
+      sizeGB: 1
+
+# No external database needed - using SQLite stored on disk 

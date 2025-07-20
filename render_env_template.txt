@@ -1,0 +1,29 @@
+# Render Environment Variables Template
+# These will be set in Render Dashboard -> Environment
+
+# Django Core Settings
+DEBUG=False
+SECRET_KEY=your-secret-key-here-render-can-generate-this
+ALLOWED_HOSTS=your-app-name.onrender.com,*.onrender.com
+
+# Platform Detection
+RENDER=true
+
+# Admin User (Optional - will be created automatically)
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@oshioxi.site
+DJANGO_SUPERUSER_PASSWORD=your-admin-password
+
+# Email Settings (Optional - for contact form)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+
+# Custom Domain (Optional)
+# If you want to use custom domain like oshioxi.site
+# ALLOWED_HOSTS=oshioxi.site,www.oshioxi.site,your-app-name.onrender.com
+
+# Database (SQLite - automatically managed)
+# No database configuration needed - using SQLite with persistent disk 
