@@ -1,0 +1,140 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}My Projects - Portfolio{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <!-- Page Title -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold" data-translate="my_projects">
+                MY <span class="text-primary">PROJECTS</span>
+            </h1>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="text-center mb-5">
+            <div class="d-flex justify-content-center flex-wrap gap-3">
+                <a href="{% url 'courses' %}" class="btn {% if not current_level %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+                    ALL
+                </a>
+                <a href="?level=beginner" class="btn {% if current_level == 'beginner' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+                    HTML/CSS/JAVASCRIPT
+                </a>
+                <a href="?level=intermediate" class="btn {% if current_level == 'intermediate' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+                    THYMELEAF
+                </a>
+                <a href="?level=advanced" class="btn {% if current_level == 'advanced' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+                    NEXTJS/REACTJS/TAILWIND
+                </a>
+                <a href="?level=api" class="btn {% if current_level == 'api' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+                    API
+                </a>
+            </div>
+        </div>
+
+        <!-- Projects Grid -->
+        {% if page_obj %}
+            <div class="row">
+                {% for course in page_obj %}
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="project-card">
+                                                 {% if course.thumbnail %}
+                             <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="project-image">
+                         {% else %}
+                             <img src="https://placehold.co/600x300/1e1e1e/ffb400?text=PROJECT" alt="{{ course.title }}" class="project-image">
+                         {% endif %}
+                        
+                        <div class="project-overlay">
+                            <div class="project-info">
+                                <h5 class="project-title mb-2">{{ course.title }}</h5>
+                                <p class="project-description text-muted mb-3">{{ course.description|truncatewords:15 }}</p>
+                                
+                                <div class="project-actions">
+                                    {% if course.course_url %}
+                                        <a href="{{ course.course_url }}" target="_blank" class="btn btn-primary btn-sm me-2">
+                                            <i class="fas fa-external-link-alt me-1"></i>Live Demo
+                                        </a>
+                                    {% endif %}
+                                    <a href="{% url 'course_detail' course.slug %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i>Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-code fa-4x text-muted mb-3"></i>
+                <h4>No Projects Yet</h4>
+                <p class="text-muted">More projects coming soon!</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% block extra_css %}
+<style>
+    .project-card {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        height: 300px;
+        background: var(--dark-secondary);
+        transition: all 0.3s ease;
+    }
+    
+    .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    .project-image, .project-placeholder {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .project-placeholder {
+        background: var(--dark-secondary);
+    }
+    
+    .project-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+    
+    .project-card:hover .project-overlay {
+        opacity: 1;
+    }
+    
+    .project-info {
+        text-align: center;
+        padding: 2rem;
+    }
+    
+    .project-title {
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+    
+    .project-description {
+        color: #ccc;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+{% endblock %} 

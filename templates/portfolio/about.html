@@ -1,0 +1,214 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}About Me - Portfolio{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <!-- Page Title -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold" data-translate="about_me">
+                ABOUT <span class="text-primary">ME</span>
+            </h1>
+        </div>
+
+        <div class="row">
+            <!-- Personal Information -->
+            <div class="col-lg-6 mb-5">
+                <h3 class="mb-4" data-translate="personal_info">PERSONAL INFORMATION</h3>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <strong data-translate="first_name">First Name:</strong> 
+                        <span class="text-muted">{% if profile %}Toàn{% else %}Toàn{% endif %}</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong data-translate="last_name">Last Name:</strong> 
+                        <span class="text-muted">{% if profile %}Đào Huy{% else %}Đào Huy{% endif %}</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong data-translate="birthday">Birthday:</strong> 
+                        <span class="text-muted">11/01/2003</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong data-translate="sex">Sex:</strong> 
+                        <span class="text-muted" data-translate="male">Male</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong data-translate="nation">Nation:</strong> 
+                        <span class="text-muted" data-translate="viet_nam">Viet Nam</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong data-translate="address">Address:</strong> 
+                        <span class="text-muted">My Dinh, Ha Noi</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong data-translate="phone">Phone:</strong> 
+                        <span class="text-muted">{% if profile %}{{ profile.phone }}{% else %}0356581703{% endif %}</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>Git:</strong> 
+                        <span class="text-muted">https://github.com/Oshioxi2003</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong data-translate="language">Language:</strong> 
+                        <span class="text-muted" data-translate="vietnamese_english">Vietnamese, English</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong data-translate="email">Email:</strong> 
+                        <span class="text-muted">{% if profile %}{{ profile.email }}{% else %}duct1531@gmail.com{% endif %}</span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-download me-2"></i><span data-translate="download_cv">DOWNLOAD CV</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="col-lg-6 mb-5">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="stat-card text-center">
+                            <div class="stat-number">
+                                {% if profile %}{{ profile.courses_created|default:5 }}{% else %}5{% endif %}<sup class="text-primary">+</sup>
+                            </div>
+                            <div class="stat-label" data-translate="personal_projects">
+                                PERSONAL<br>PROJECTS
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="stat-card text-center">
+                            <div class="stat-number">
+                                {% if profile %}{{ profile.years_experience|default:0 }}{% else %}0{% endif %}<sup class="text-primary">+</sup>
+                            </div>
+                            <div class="stat-label" data-translate="years_experience">
+                                YEARS OF<br>EXPERIENCE
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="text-center mb-5" data-translate="my_skills">MY SKILLS</h3>
+                
+                <div class="row">
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <i class="fab fa-css3-alt" style="color: #1572B6;"></i>
+                            </div>
+                            <h6>CSS</h6>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <i class="fas fa-wind" style="color: #06B6D4;"></i>
+                            </div>
+                            <h6>TAILWIND</h6>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <i class="fa-brands fa-python"></i>
+                            </div>
+                            <h6>PYTHON</h6>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <i class="fas fa-database" style="color: #4479A1;"></i>
+                            </div>
+                            <h6>MYSQL</h6>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <i class="fab fa-js-square" style="color: #F7DF1E;"></i>
+                            </div>
+                            <h6>JAVASCRIPT</h6>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <i class="fa-brands fa-ubuntu" style="color: #e24d0d;"></i>
+                            </div>
+                            <h6>UBUNTU</h6>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <i class="fab fa-git-alt" style="color: #F05032;"></i>
+                            </div>
+                            <h6>GIT</h6>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="skill-item">
+                            <div class="skill-icon">
+                                <i class="fa-brands fa-aws" style="color: #FF9900;"></i>
+                            </div>
+                            <h6>AWS</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education & Experience -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="text-center mb-5" data-translate="education_experience">EDUCATION & EXPERIENCE</h3>
+                
+                <div class="row">
+                    <!-- Education Column -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="timeline-item d-flex mb-4">
+                            <div class="timeline-icon">
+                                <div class="bg-primary rounded-circle" style="width: 20px; height: 20px;"></div>
+                            </div>
+                            <div class="timeline-content ms-4">
+                                <span class="text-primary fw-bold">2021</span>
+                                <h6 class="fw-bold mt-2">EAST ASIA UNIVERSITY OF TECHNOLOGY</h6>
+                                <p class="text-muted" data-translate="graduated">Graduated</p>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                    <!-- Experience Column -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="timeline-item d-flex mb-4">
+                            <div class="timeline-icon">
+                                <div class="bg-primary rounded-circle" style="width: 20px; height: 20px;"></div>
+                            </div>
+                            <div class="timeline-content ms-4">
+                                <span class="text-primary fw-bold">03/2024 - 05/2025</span>
+                                <h6 class="fw-bold mt-2">Dexterhoang Fx Financial Technology Company Limited
+                                </h6>
+                                <p class="text-muted">Devops intern</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

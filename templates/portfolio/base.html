@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Portfolio{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #ffb400;
+            
+            /* Dark Theme */
+            --dark-bg: #111111;
+            --dark-secondary: #1e1e1e;
+            --dark-text: #ffffff;
+            --dark-text-muted: #999999;
+            
+            /* Light Theme */
+            --light-bg: #ffffff;
+            --light-secondary: #f8f9fa;
+            --light-text: #333333;
+            --light-text-muted: #666666;
+            --light-border: #e9ecef;
+        }
+        
+        /* Default Dark Theme */
+        [data-theme="dark"] {
+            --bg-color: var(--dark-bg);
+            --bg-secondary: var(--dark-secondary);
+            --text-color: var(--dark-text);
+            --text-muted: var(--dark-text-muted);
+            --border-color: #333;
+            --card-bg: var(--dark-secondary);
+            --hover-bg: #2a2a2a;
+        }
+        
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-color: var(--light-bg);
+            --bg-secondary: var(--light-secondary);
+            --text-color: var(--light-text);
+            --text-muted: var(--light-text-muted);
+            --border-color: var(--light-border);
+            --card-bg: #ffffff;
+            --hover-bg: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        /* Fixed Navigation */
+        .fixed-nav {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .nav-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-secondary);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid var(--border-color);
+            overflow: hidden;
+            position: relative;
+            white-space: nowrap;
+            padding: 0 15px;
+        }
+        
+        .nav-icon i {
+            font-size: 18px;
+            transition: all 0.3s ease;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        .nav-text {
+            opacity: 0;
+            margin-left: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            transform: translateX(-10px);
+        }
+        
+        .nav-icon:hover {
+            width: 140px;
+            background: var(--primary-color);
+            color: var(--bg-color);
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 180, 0, 0.4);
+        }
+        
+        .nav-icon:hover .nav-text {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .nav-icon.active {
+            width: 140px;
+            background: var(--primary-color);
+            color: var(--bg-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(255, 180, 0, 0.4);
+        }
+        
+        .nav-icon.active .nav-text {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* Responsive Navigation */
+        @media (max-width: 768px) {
+            .fixed-nav {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                right: auto;
+                top: auto;
+                transform: translateX(-50%);
+                flex-direction: row;
+                gap: 10px;
+                background: rgba(26, 26, 26, 0.95);
+                backdrop-filter: blur(15px);
+                border-radius: 30px;
+                padding: 15px 25px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+                animation: slideUpFadeIn 0.5s ease-out;
+            }
+            
+            @keyframes slideUpFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(100px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+            
+            [data-theme="light"] .fixed-nav {
+                background: rgba(255, 255, 255, 0.95);
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            }
+            
+            /* Pulse animation for active nav on mobile */
+            @keyframes pulse {
+                0% {
+                    box-shadow: 0 8px 25px rgba(255, 180, 0, 0.5);
+                }
+                50% {
+                    box-shadow: 0 8px 25px rgba(255, 180, 0, 0.8);
+                }
+                100% {
+                    box-shadow: 0 8px 25px rgba(255, 180, 0, 0.5);
+                }
+            }
+            
+            .nav-icon.active {
+                animation: pulse 2s infinite;
+            }
+            
+            .nav-icon {
+                width: 45px;
+                height: 45px;
+                padding: 0;
+                justify-content: center;
+                border-radius: 15px;
+                border: 1px solid var(--border-color);
+                background: var(--bg-secondary);
+            }
+            
+            .nav-icon:hover,
+            .nav-icon.active {
+                width: 45px;
+                background: var(--primary-color);
+                color: var(--bg-color);
+                border-color: var(--primary-color);
+                transform: translateY(-5px) scale(1.15);
+                box-shadow: 0 8px 25px rgba(255, 180, 0, 0.5);
+            }
+            
+            .nav-icon.active::before {
+                content: '';
+                position: absolute;
+                top: -8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 4px;
+                height: 4px;
+                background: var(--primary-color);
+                border-radius: 50%;
+                box-shadow: 0 0 8px rgba(255, 180, 0, 0.8);
+            }
+            
+            .nav-text {
+                display: none;
+            }
+            
+            .nav-icon i {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .fixed-nav {
+                bottom: 15px;
+                padding: 12px 18px;
+                gap: 8px;
+                border-radius: 25px;
+            }
+            
+            .nav-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+            }
+            
+            .nav-icon:hover,
+            .nav-icon.active {
+                transform: translateY(-3px) scale(1.1);
+            }
+            
+            .nav-icon i {
+                font-size: 14px;
+            }
+            
+            .nav-icon.active::before {
+                top: -6px;
+                width: 3px;
+                height: 3px;
+            }
+            
+            body {
+                padding-bottom: 100px;
+            }
+        }
+        
+        /* Mobile body padding to prevent overlap with bottom navigation */
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 120px;
+            }
+            
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            color: var(--bg-color);
+            font-weight: 600;
+            padding: 15px 30px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-primary:hover {
+            background: #e6a200;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 180, 0, 0.3);
+            color: var(--bg-color);
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+            font-weight: 600;
+            padding: 15px 30px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: var(--bg-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline-secondary {
+            border: 2px solid var(--text-muted);
+            color: var(--text-muted);
+            background: transparent;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-outline-secondary:hover {
+            background: var(--text-muted);
+            color: var(--bg-color);
+            transform: translateY(-2px);
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+        
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
+        /* Sections */
+        .section-padding {
+            padding: 100px 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-section {
+            background: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="dark"] .card {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        [data-theme="dark"] .card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        /* Profile Image */
+        .profile-image {
+            width: 300px;
+            height: 350px;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Stats */
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Forms */
+        .form-control {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 10px;
+            padding: 15px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            background: var(--bg-secondary);
+            border-color: var(--primary-color);
+            color: var(--text-color);
+            box-shadow: 0 0 0 0.2rem rgba(255, 180, 0, 0.25);
+        }
+        
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* Skills Grid */
+        .skill-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin: 1rem 0;
+        }
+        
+        .skill-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        [data-theme="dark"] .skill-item:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .skill-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .fixed-nav {
+                right: 15px;
+                gap: 15px;
+            }
+            
+            .nav-icon {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .section-padding {
+                padding: 50px 0;
+            }
+            
+            .profile-image {
+                width: 250px;
+                height: 300px;
+            }
+        }
+        
+        /* Hide default navbar */
+        .navbar {
+            display: none;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            margin-top: 50px;
+        }
+        
+        /* Theme & Language Switchers */
+        .switcher-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            gap: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .switcher-container {
+                top: 15px;
+                left: 15px;
+                right: auto;
+                gap: 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .switcher-container {
+                top: 12px;
+                left: 12px;
+                gap: 6px;
+            }
+            
+            .theme-switcher, .lang-switcher {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+        }
+        
+        .theme-switcher, .lang-switcher {
+            width: 45px;
+            height: 45px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+            font-size: 18px;
+        }
+        
+        .theme-switcher:hover, .lang-switcher:hover {
+            background: var(--primary-color);
+            color: var(--bg-color);
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body data-theme="dark">
+
+    <!-- Theme & Language Switchers -->
+    <div class="switcher-container">
+        <div class="theme-switcher" onclick="toggleTheme()" title="Toggle Theme">
+            <i class="fas fa-sun" id="theme-icon"></i>
+        </div>
+        <div class="lang-switcher" onclick="toggleLanguage()" title="Change Language">
+            <span id="lang-text">EN</span>
+        </div>
+    </div>
+
+    <!-- Fixed Navigation -->
+    <nav class="fixed-nav">
+        <a href="{% url 'home' %}" class="nav-icon {% if request.resolver_match.url_name == 'home' %}active{% endif %}" title="Home">
+            <i class="fas fa-home"></i>
+            <span class="nav-text" data-translate="home">Home</span>
+        </a>
+        <a href="{% url 'about' %}" class="nav-icon {% if request.resolver_match.url_name == 'about' %}active{% endif %}" title="About">
+            <i class="fas fa-user"></i>
+            <span class="nav-text" data-translate="about">About</span>
+        </a>
+        <a href="{% url 'courses' %}" class="nav-icon {% if 'courses' in request.resolver_match.url_name %}active{% endif %}" title="Projects">
+            <i class="fas fa-briefcase"></i>
+            <span class="nav-text" data-translate="projects">Projects</span>
+        </a>
+        <a href="{% url 'contact' %}" class="nav-icon {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" title="Contact">
+            <i class="fas fa-envelope"></i>
+            <span class="nav-text" data-translate="contact">Contact</span>
+        </a>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container py-4">
+            <div class="text-center">
+                <p class="text-muted mb-0">
+                    © 2024 Portfolio. Made with <i class="fas fa-heart text-primary"></i> using Django
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Theme & Language Switching Logic -->
+    <script>
+        // Translation data
+        const translations = {
+            'vi': {
+                'home': 'Trang chủ',
+                'about': 'Giới thiệu',
+                'projects': 'Dự án',
+                'contact': 'Liên hệ',
+                'home_greeting': '— Tôi là Đào Huy Toàn',
+                'home_title': 'Web Developer',
+                'home_description': 'Xin chào! Tôi là Toàn và tôi là một người rất đam mê công nghệ, đặc biệt là web. Tôi mong muốn tạo ra những trang web không chỉ hoạt động hiệu quả mà còn mang lại giá trị thực tiễn đáng kể, với thiết kế tối ưu và trải nghiệm người dùng xuất sắc.',
+                'about_btn': 'GIỚI THIỆU',
+                'project_btn': 'DỰ ÁN',
+                'about_me': 'GIỚI THIỆU VỀ TÔI',
+                'personal_info': 'THÔNG TIN CÁ NHÂN',
+                'first_name': 'Tên',
+                'last_name': 'Họ',
+                'birthday': 'Ngày sinh',
+                'sex': 'Giới tính',
+                'nation': 'Quốc gia',
+                'address': 'Địa chỉ',
+                'phone': 'Điện thoại',
+                'email': 'Email',
+                'language': 'Ngôn ngữ',
+                'download_cv': 'TẢI CV',
+                'my_skills': 'KỸ NĂNG CỦA TÔI',
+                'education_experience': 'HỌC VẤN & KINH NGHIỆM',
+                'my_projects': 'DỰ ÁN CỦA TÔI',
+                'get_in_touch': 'LIÊN HỆ',
+                'dont_be_shy': 'ĐỪNG NGẠI NGÙNG',
+                'contact_description': 'Cảm ơn bạn đã đọc đến cuối. Tôi hy vọng bạn đã hiểu thêm về tôi qua trang web này. Nếu bạn có bất kỳ nhận xét nào về trang web này hoặc về tôi, hãy sử dụng form bên dưới.',
+                'send_message': 'GỬI TIN NHẮN',
+                'male': 'Nam',
+                'viet_nam': 'Việt Nam',
+                'vietnamese_english': 'Tiếng Việt, Tiếng Anh',
+                'graduated': 'Đã tốt nghiệp',
+                'personal_projects': 'DỰ ÁN<br>CÁ NHÂN',
+                'years_experience': 'NĂM<br>KINH NGHIỆM',
+                'name_placeholder': 'TÊN',
+                'email_placeholder': 'EMAIL',
+                'subject_placeholder': 'CHỦ ĐỀ',
+                'message_placeholder': 'TIN NHẮN CỦA BẠN'
+            },
+            'en': {
+                'home': 'Home',
+                'about': 'About',
+                'projects': 'Projects', 
+                'contact': 'Contact',
+                'home_greeting': '— I\'m Dao Huy Toan',
+                'home_title': 'Web Developer',
+                'home_description': 'Nice to meet you! My name is Toan and I am a person who is very passionate about technology, especially the web. I aspire to create websites that not only operate efficiently but also deliver significant practical value, featuring optimal design and exceptional user experiences.',
+                'about_btn': 'ABOUT',
+                'project_btn': 'PROJECT',
+                'about_me': 'ABOUT ME',
+                'personal_info': 'PERSONAL INFORMATION',
+                'first_name': 'First Name',
+                'last_name': 'Last Name',
+                'birthday': 'Birthday',
+                'sex': 'Sex',
+                'nation': 'Nation',
+                'address': 'Address',
+                'phone': 'Phone',
+                'email': 'Email',
+                'language': 'Language',
+                'download_cv': 'DOWNLOAD CV',
+                'my_skills': 'MY SKILLS',
+                'education_experience': 'EDUCATION & EXPERIENCE',
+                'my_projects': 'MY PROJECTS',
+                'get_in_touch': 'GET IN TOUCH',
+                'dont_be_shy': 'DON\'T BE SHY',
+                'contact_description': 'Thank you for reading to the end. I hope that you have learned a little about me through this site. If you have any comments about this site or me, please use the form.',
+                'send_message': 'SEND MESSAGE',
+                'male': 'Male',
+                'viet_nam': 'Viet Nam',
+                'vietnamese_english': 'Vietnamese, English',
+                'graduated': 'Graduated',
+                'personal_projects': 'PERSONAL<br>PROJECTS',
+                'years_experience': 'YEARS OF<br>EXPERIENCE',
+                'name_placeholder': 'NAME',
+                'email_placeholder': 'EMAIL',
+                'subject_placeholder': 'SUBJECT',
+                'message_placeholder': 'YOUR MESSAGE'
+            }
+        };
+
+        // Initialize theme and language from localStorage
+        function initializeSettings() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const savedLang = localStorage.getItem('language') || 'en';
+            
+            setTheme(savedTheme);
+            setLanguage(savedLang);
+        }
+
+        // Theme switching
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function setTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            const themeIcon = document.getElementById('theme-icon');
+            if (theme === 'dark') {
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+
+        // Language switching
+        function toggleLanguage() {
+            const currentLang = localStorage.getItem('language') || 'en';
+            const newLang = currentLang === 'en' ? 'vi' : 'en';
+            setLanguage(newLang);
+            localStorage.setItem('language', newLang);
+        }
+
+        function setLanguage(lang) {
+            document.getElementById('lang-text').textContent = lang.toUpperCase();
+            
+            // Update all translatable elements
+            const translatableElements = document.querySelectorAll('[data-translate]');
+            translatableElements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    if (element.tagName === 'INPUT' && element.type === 'text') {
+                        element.placeholder = translations[lang][key];
+                    } else {
+                        element.innerHTML = translations[lang][key];
+                    }
+                }
+            });
+            
+            // Update form placeholders
+            const placeholderElements = document.querySelectorAll('[data-translate-placeholder]');
+            placeholderElements.forEach(element => {
+                const key = element.getAttribute('data-translate-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSettings();
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

@@ -1,0 +1,153 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}Get In Touch - Portfolio{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <!-- Page Title -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold" data-translate="get_in_touch">
+                GET IN <span class="text-primary">TOUCH</span>
+            </h1>
+        </div>
+
+        <div class="row">
+            <!-- Contact Info -->
+            <div class="col-lg-4 mb-5">
+                <div class="contact-info">
+                    <h3 class="mb-4" data-translate="dont_be_shy">DON'T BE SHY</h3>
+                    <p class="text-muted mb-5" data-translate="contact_description">
+                        Thank you for reading to the end. I hope that you have 
+                        learned a little about me through this site. If you have 
+                        any comments about this site or me, please use the form.
+                    </p>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item d-flex mb-4">
+                            <div class="contact-icon me-3">
+                                <i class="fas fa-map-marker-alt text-primary fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">ADDRESS</h6>
+                                <p class="text-muted mb-0">Ha Noi</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item d-flex mb-4">
+                            <div class="contact-icon me-3">
+                                <i class="fas fa-envelope text-primary fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">EMAIL</h6>
+                                <p class="text-muted mb-0">{% if profile %}{{ profile.email }}{% else %}duct1531@gmail.com{% endif %}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item d-flex mb-4">
+                            <div class="contact-icon me-3">
+                                <i class="fas fa-phone text-primary fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">PHONE</h6>
+                                <p class="text-muted mb-0">{% if profile %}{{ profile.phone }}{% else %}0356581703{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Links -->
+                    <div class="social-links mt-4">
+                        <a href="{% if profile %}{{ profile.facebook_url }}{% else %}#{% endif %}" target="_blank" class="social-link me-3">
+                            <i class="fab fa-facebook fa-lg"></i>
+                        </a>
+                        <a href="https://github.com/Oshioxi2003" target="_blank" class="social-link">
+                            <i class="fab fa-github fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-8">
+                <div class="contact-form">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.subject }}
+                            {% if form.subject.errors %}
+                                <div class="text-danger small mt-1">{{ form.subject.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.message }}
+                            {% if form.message.errors %}
+                                <div class="text-danger small mt-1">{{ form.message.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-paper-plane me-2"></i><span data-translate="send_message">SEND MESSAGE</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_css %}
+<style>
+    .contact-info {
+        padding: 2rem 0;
+    }
+    
+    .contact-item {
+        align-items: flex-start;
+    }
+    
+    .contact-icon {
+        width: 40px;
+        display: flex;
+        justify-content: center;
+        margin-top: 5px;
+    }
+    
+    .social-links .social-link {
+        color: var(--text-gray);
+        transition: color 0.3s ease;
+        text-decoration: none;
+    }
+    
+    .social-links .social-link:hover {
+        color: var(--primary-color);
+    }
+    
+    .contact-form .form-control {
+        height: 60px;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+    
+    .contact-form textarea.form-control {
+        height: 150px;
+        resize: vertical;
+    }
+</style>
+{% endblock %}
+{% endblock %} 

@@ -1,0 +1,21 @@
+# Copy this file to .env and update the values
+
+# Django Settings
+DEBUG=True
+SECRET_KEY=your-super-secret-key-change-this-in-production
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+
+# Database Settings
+DB_NAME=portfolio_db
+DB_USER=portfolio_user
+DB_PASSWORD=portfolio_password123
+DB_ROOT_PASSWORD=root_password123
+DB_HOST=db
+DB_PORT=3306
+
+# Email Settings (Optional)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password 

@@ -1,0 +1,55 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}{{ course.title }} - Portfolio{% endblock %}
+
+{% block content %}
+<div class="container section-padding">
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="display-6 fw-bold mb-3">{{ course.title }}</h1>
+            
+            {% if course.thumbnail %}
+                <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="img-fluid rounded mb-4">
+            {% else %}
+                <img src="https://placehold.co/800x400/1e1e1e/ffb400?text=PROJECT" alt="{{ course.title }}" class="img-fluid rounded mb-4">
+            {% endif %}
+            
+            <p class="lead">{{ course.description }}</p>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <strong>Cấp độ:</strong> {{ course.get_level_display }}
+                </div>
+                <div class="col-md-6">
+                    <strong>Thời lượng:</strong> {{ course.duration|default:"Chưa cập nhật" }}
+                </div>
+            </div>
+            
+            {% if course.course_url %}
+                <a href="{{ course.course_url }}" target="_blank" class="btn btn-primary btn-lg">
+                    {% if course.enrollment_required %}Đăng ký khóa học{% else %}Xem khóa học{% endif %}
+                </a>
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Thông tin khóa học</h5>
+                    <p><strong>Giá:</strong> 
+                        {% if course.price > 0 %}
+                            ${{ course.price }}
+                        {% else %}
+                            Miễn phí
+                        {% endif %}
+                    </p>
+                    <p><strong>Cấp độ:</strong> {{ course.get_level_display }}</p>
+                    {% if course.duration %}
+                        <p><strong>Thời lượng:</strong> {{ course.duration }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
