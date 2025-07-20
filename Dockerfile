@@ -39,10 +39,6 @@ USER renderuser
 # Expose port (Render assigns PORT automatically)
 EXPOSE $PORT
 
-<<<<<<< HEAD
 # Start command
 CMD gunicorn --bind 0.0.0.0:$PORT --workers 2 --timeout 120 portfolio_site.wsgi:application 
-=======
-# Start command (Render will override this with gunicorn)
-CMD gunicorn --bind 0.0.0.0:$PORT --workers 2 --timeout 120 portfolio_site.wsgi:application 
->>>>>>> 9a27a8e495e7e231e798a309cab7f72f3f639f11
+
