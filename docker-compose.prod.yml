@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: oshioxi_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --innodb-buffer-pool-size=256M
+      --max-connections=100
+      --innodb-log-file-size=64M
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
+      interval: 30s
+    networks:
+      - portfolio-network
+
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: oshioxi_web
+    restart: unless-stopped
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=${SECRET_KEY}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=db
+      - DB_PORT=3306
+      - ALLOWED_HOSTS=oshioxi.site,www.oshioxi.site
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - portfolio-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: oshioxi_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.prod.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    depends_on:
+      - web
+    networks:
+      - portfolio-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: oshioxi_certbot
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    command: certonly --webroot --webroot-path=/var/www/certbot --email your-email@example.com --agree-tos --no-eff-email -d oshioxi.site -d www.oshioxi.site
+
+volumes:
+  mysql_data:
+  static_volume:
+  media_volume:
+
+networks:
+  portfolio-network:
+    driver: bridge 

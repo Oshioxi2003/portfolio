@@ -1,0 +1,32 @@
+# Production Environment for oshioxi.site
+# Copy this file to .env and update the values
+# IMPORTANT: Change all passwords and secret keys!
+
+# Django Settings
+DEBUG=False
+SECRET_KEY=CHANGE-THIS-TO-A-VERY-SECURE-SECRET-KEY-FOR-PRODUCTION
+ALLOWED_HOSTS=oshioxi.site,www.oshioxi.site
+
+# Database Settings
+DB_NAME=oshioxi_portfolio
+DB_USER=oshioxi_user
+DB_PASSWORD=CHANGE-THIS-SECURE-PASSWORD
+DB_ROOT_PASSWORD=CHANGE-THIS-ROOT-PASSWORD
+DB_HOST=db
+DB_PORT=3306
+
+# Django Superuser
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@oshioxi.site
+DJANGO_SUPERUSER_PASSWORD=CHANGE-THIS-ADMIN-PASSWORD
+
+# Email Settings (Optional - for contact form)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+
+# SSL/HTTPS
+SSL_REDIRECT=True
+USE_HTTPS=True 
