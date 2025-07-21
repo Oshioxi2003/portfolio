@@ -35,3 +35,14 @@ Not Found: /favicon.ico
 "GET /contact/ HTTP/1.1" 200 32276
 "GET /courses/ HTTP/1.1" 200 29625
 "GET /about/ HTTP/1.1" 200 35508
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 27794
+Not Found: /profile/avatars/avatar_web_developer.jpg
+"GET /profile/avatars/avatar_web_developer.jpg HTTP/1.1" 404 3917
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 3830
+"GET /about/ HTTP/1.1" 200 35508
+"GET /courses/ HTTP/1.1" 200 29625
+"GET /contact/ HTTP/1.1" 200 32276
+"GET /contact/ HTTP/1.1" 200 32276
