@@ -1,0 +1,37 @@
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 27801
+"GET /media/profile/avatars/avatar_web_developer.jpg HTTP/1.1" 200 4440159
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 3830
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 27801
+"GET /media/profile/avatars/avatar_web_developer.jpg HTTP/1.1" 200 4440159
+"GET /about/ HTTP/1.1" 200 35508
+"GET /about/ HTTP/1.1" 200 35508
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 3830
+"GET / HTTP/1.1" 200 27801
+"GET /media/profile/avatars/avatar_web_developer.jpg HTTP/1.1" 304 0
+"GET /about/ HTTP/1.1" 200 35508
+"GET /courses/ HTTP/1.1" 200 29625
+"GET /contact/ HTTP/1.1" 200 32276
+"GET /courses/ HTTP/1.1" 200 29625
+"GET /about/ HTTP/1.1" 200 35508
+"GET / HTTP/1.1" 200 27801
+"GET /about/ HTTP/1.1" 200 35508
+"GET /courses/ HTTP/1.1" 200 29625
+"GET /contact/ HTTP/1.1" 200 32276
+"GET /courses/ HTTP/1.1" 200 29625
+"GET /courses/?level=intermediate HTTP/1.1" 200 29625
+"GET /courses/?level=advanced HTTP/1.1" 200 29625
+"GET /courses/?level=intermediate HTTP/1.1" 200 29625
+"GET /courses/?level=beginner HTTP/1.1" 200 29625
+"GET /contact/ HTTP/1.1" 200 32276
+"GET /about/ HTTP/1.1" 200 35508
+"GET / HTTP/1.1" 200 27801
+"GET /media/profile/avatars/avatar_web_developer.jpg HTTP/1.1" 304 0
+"GET /courses/ HTTP/1.1" 200 29625
+"GET /contact/ HTTP/1.1" 200 32276
+"GET /courses/ HTTP/1.1" 200 29625
+"GET /about/ HTTP/1.1" 200 35508

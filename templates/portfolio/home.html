@@ -10,7 +10,7 @@
             <div class="col-lg-6 order-lg-2">
                 <div class="text-center">
                     {% if profile and profile.avatar %}
-                        <img src="{{ profile.avatar.url }}" alt="{{ profile.name }}" class="profile-image">
+                        <img src="{{ profile.avatar }}" alt="{{ profile.name }}" class="profile-image">
                     {% else %}
                         <img src="https://placehold.co/300x350/1e1e1e/ffb400?text=PORTFOLIO" alt="Profile" class="profile-image">
                     {% endif %}

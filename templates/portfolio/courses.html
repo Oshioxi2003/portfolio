@@ -40,7 +40,7 @@
                 <div class="col-lg-6 col-md-6 mb-4">
                     <div class="project-card">
                                                  {% if course.thumbnail %}
-                             <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="project-image">
+                             <img src="{{ course.thumbnail }}" alt="{{ course.title }}" class="project-image">
                          {% else %}
                              <img src="https://placehold.co/600x300/1e1e1e/ffb400?text=PROJECT" alt="{{ course.title }}" class="project-image">
                          {% endif %}

@@ -42,7 +42,7 @@ class Profile(models.Model):
     name = models.CharField("Tên", max_length=100)
     tagline = models.CharField("Tagline", max_length=200)
     bio = models.TextField("Mô tả bản thân")
-    avatar = models.ImageField("Ảnh đại diện", upload_to=profile_avatar_path, blank=True)
+    avatar = models.URLField("Link ảnh đại diện", blank=True, help_text="Link đến ảnh đại diện (VD: https://images.unsplash.com/...)")
     email = models.EmailField("Email")
     phone = models.CharField("Số điện thoại", max_length=20, blank=True)
     
@@ -74,7 +74,7 @@ class Course(models.Model):
     title = models.CharField("Tiêu đề", max_length=200)
     slug = models.SlugField("Slug", unique=True, blank=True)
     description = models.TextField("Mô tả")
-    thumbnail = models.ImageField("Ảnh thumbnail", upload_to=course_thumbnail_path, blank=True)
+    thumbnail = models.URLField("Link ảnh thumbnail", blank=True, help_text="Link đến ảnh thumbnail khóa học")
     icon = models.CharField("Icon class (Bootstrap/Font Awesome)", max_length=100, blank=True)
     
     # Course details
@@ -121,7 +121,7 @@ class BlogPost(models.Model):
     slug = models.SlugField("Slug", unique=True, blank=True)
     content = models.TextField("Nội dung")
     excerpt = models.TextField("Tóm tắt", max_length=300, blank=True)
-    featured_image = models.ImageField("Ảnh đại diện", upload_to=blog_image_path, blank=True)
+    featured_image = models.URLField("Link ảnh đại diện", blank=True, help_text="Link đến ảnh đại diện bài viết")
     
     # Meta
     tags = models.CharField("Tags (phân cách bằng dấu phẩy)", max_length=200, blank=True)
@@ -164,7 +164,7 @@ class PodcastEpisode(models.Model):
     title = models.CharField("Tiêu đề", max_length=200)
     slug = models.SlugField("Slug", unique=True, blank=True)
     description = models.TextField("Mô tả")
-    thumbnail = models.ImageField("Ảnh thumbnail", upload_to=podcast_thumbnail_path, blank=True)
+    thumbnail = models.URLField("Link ảnh thumbnail", blank=True, help_text="Link đến ảnh thumbnail episode")
     
     # Media
     audio_url = models.URLField("Link audio", blank=True)
