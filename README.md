@@ -329,4 +329,4 @@ git add . && git commit -m "Update" && git push  # Deploy to Render
 - **Admin:** http://127.0.0.1:8000/admin/
 - **Live:** https://your-app.onrender.com
 
-**💡 Lưu ý:** Tất cả tính năng đã được test và sẵn sàng production. Chỉ cần follow hướng dẫn để có portfolio professional! 🎊 
+
