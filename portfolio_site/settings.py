@@ -115,18 +115,21 @@ if DATABASE_URL:
         'default': dj_database_url.parse(DATABASE_URL)
     }
 else:
-    # Use MSSQL for other environments (local development, Azure, etc.)
+    # Use MySQL for other environments (local development, Stackhero, etc.)
     DATABASES = {
         'default': {
-            'ENGINE': 'mssql',
-            'NAME': config('MSSQL_DATABASE', default='dehmbtpua8bgw84'),
-            'USER': config('MSSQL_USER', default='ugoxdlf1k4otkz2'),
-            'PASSWORD': config('MSSQL_PASSWORD', default='i3HW?WLMRX5&#VH3TlDYEZ@gi'),
-            'HOST': config('MSSQL_HOST', default='eu-az-sql-serv1.database.windows.net'),
-            'PORT': config('MSSQL_PORT', default='1433'),
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': config('MYSQL_DATABASE', default='root'),
+            'USER': config('MYSQL_USER', default='root'),
+            'PASSWORD': config('MYSQL_PASSWORD', default='I02ep6n07ORZNdH8rsZF4zNS6ghMXFMw'),
+            'HOST': config('MYSQL_HOST', default='r0a59s.stackhero-network.com'),
+            'PORT': config('MYSQL_PORT', default='4492'),
             'OPTIONS': {
-                'driver': 'ODBC Driver 17 for SQL Server',
-                'extra_params': 'Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;MultipleActiveResultSets=False;Persist Security Info=False;',
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                'charset': 'utf8mb4',
+                'use_unicode': True,
+                'autocommit': True,
+                'sql_mode': 'traditional',
             },
         }
     }
