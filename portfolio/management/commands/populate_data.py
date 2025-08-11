@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from portfolio.models import Profile, Course, BlogPost, PodcastEpisode
+from portfolio.models import Profile, Course, BlogPost, PodcastEpisode, Category
 
 
 class Command(BaseCommand):
@@ -27,52 +27,124 @@ class Command(BaseCommand):
         )
         self.stdout.write(f'✓ Profile: {profile.name}')
 
-        # Tạo Courses
+        # Tạo Categories
+        categories_data = [
+            {
+                'name': 'Web Development',
+                'description': 'Full-stack web applications và websites',
+                'icon': 'fas fa-globe-americas',
+                'color': '#007bff'
+            },
+            {
+                'name': 'Mobile App',
+                'description': 'Ứng dụng di động iOS và Android',
+                'icon': 'fas fa-mobile-alt',
+                'color': '#28a745'
+            },
+            {
+                'name': 'Desktop App',
+                'description': 'Ứng dụng desktop đa nền tảng',
+                'icon': 'fas fa-desktop',
+                'color': '#ffc107'
+            },
+            {
+                'name': 'DevOps & Tools',
+                'description': 'Automation tools và DevOps solutions',
+                'icon': 'fas fa-tools',
+                'color': '#dc3545'
+            },
+            {
+                'name': 'Machine Learning',
+                'description': 'AI và Machine Learning projects',
+                'icon': 'fas fa-brain',
+                'color': '#6f42c1'
+            },
+            {
+                'name': 'Others',
+                'description': 'Các project khác',
+                'icon': 'fas fa-puzzle-piece',
+                'color': '#6c757d'
+            }
+        ]
+        
+        for cat_data in categories_data:
+            category, created = Category.objects.get_or_create(
+                name=cat_data['name'],
+                defaults=cat_data
+            )
+            if created:
+                self.stdout.write(f'✓ Category: {category.name}')
+
+        # Lấy categories để assign cho courses
+        web_dev = Category.objects.get(name='Web Development')
+        others = Category.objects.get(name='Others')
+
+        # Tạo Courses/Projects
         courses_data = [
             {
                 'title': 'E-Commerce Website',
                 'description': 'Full-featured e-commerce website built with React.js, Node.js, and MongoDB. Includes shopping cart, payment integration, and admin dashboard.',
+                'category': web_dev,
+                'technologies': 'React.js, Node.js, MongoDB, Express.js, Stripe API',
                 'level': 'advanced',
                 'duration': 'In Development',
-                'price': 0,
                 'featured': True,
-                'course_url': 'https://github.com/daohuytoann/ecommerce-project',
+                'completed': False,
+                'github_url': 'https://github.com/daohuytoann/ecommerce-project',
+                'demo_url': '',
+                'project_url': '',
             },
             {
                 'title': 'Portfolio Website',
                 'description': 'Personal portfolio website showcasing projects and skills. Built with modern web technologies including React and Tailwind CSS.',
+                'category': web_dev,
+                'technologies': 'Django, Bootstrap, JavaScript, SQLite',
                 'level': 'intermediate',
                 'duration': 'Completed',
-                'price': 0,
                 'featured': True,
-                'course_url': 'https://github.com/daohuytoann/portfolio',
+                'completed': True,
+                'github_url': 'https://github.com/daohuytoann/portfolio',
+                'demo_url': 'https://daohuytoann.onrender.com',
+                'project_url': '',
             },
             {
                 'title': 'Task Management App',
                 'description': 'A comprehensive task management application with real-time updates, user authentication, and collaborative features.',
+                'category': web_dev,
+                'technologies': 'React.js, Firebase, Material-UI, JavaScript',
                 'level': 'intermediate',
                 'duration': 'Completed',
-                'price': 0,
                 'featured': True,
-                'course_url': 'https://github.com/daohuytoann/task-manager',
+                'completed': True,
+                'github_url': 'https://github.com/daohuytoann/task-manager',
+                'demo_url': '',
+                'project_url': '',
             },
             {
                 'title': 'Weather Dashboard',
                 'description': 'Interactive weather dashboard with geolocation support, 7-day forecast, and beautiful data visualizations.',
+                'category': web_dev,
+                'technologies': 'HTML, CSS, JavaScript, OpenWeather API',
                 'level': 'beginner',
                 'duration': 'Completed',
-                'price': 0,
                 'featured': False,
-                'course_url': 'https://github.com/daohuytoann/weather-app',
+                'completed': True,
+                'github_url': 'https://github.com/daohuytoann/weather-app',
+                'demo_url': '',
+                'project_url': '',
             },
             {
                 'title': 'Blog Platform',
                 'description': 'Modern blog platform with CMS capabilities, user roles, and responsive design. Built with Django and Bootstrap.',
+                'category': web_dev,
+                'technologies': 'Django, Python, Bootstrap, SQLite, HTML, CSS',
                 'level': 'intermediate',
                 'duration': 'Completed',
-                'price': 0,
                 'featured': False,
-                'course_url': 'https://github.com/daohuytoann/blog-platform',
+                'completed': True,
+                'github_url': 'https://github.com/daohuytoann/blog-platform',
+                'demo_url': '',
+                'project_url': '',
             },
         ]
 

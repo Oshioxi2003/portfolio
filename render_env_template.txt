@@ -9,10 +9,7 @@ ALLOWED_HOSTS=your-app-name.onrender.com,*.onrender.com
 # Platform Detection
 RENDER=true
 
-# Admin User (Optional - will be created automatically)
-DJANGO_SUPERUSER_USERNAME=admin
-DJANGO_SUPERUSER_EMAIL=admin@oshioxi.site
-DJANGO_SUPERUSER_PASSWORD=your-admin-password
+
 
 # Email Settings (Optional - for contact form)
 EMAIL_HOST=smtp.gmail.com
@@ -21,9 +18,10 @@ EMAIL_USE_TLS=True
 EMAIL_HOST_USER=your-email@gmail.com
 EMAIL_HOST_PASSWORD=your-app-password
 
-# Custom Domain (Optional)
-# If you want to use custom domain like oshioxi.site
-# ALLOWED_HOSTS=oshioxi.site,www.oshioxi.site,your-app-name.onrender.com
 
-# Database (SQLite - automatically managed)
-# No database configuration needed - using SQLite with persistent disk 
+# Example for Azure SQL or other MSSQL providers:
+# MSSQL_DATABASE=your_database_name
+# MSSQL_USER=your_username
+# MSSQL_PASSWORD=your_password
+# MSSQL_HOST=your-server.database.windows.net
+# MSSQL_PORT=1433 

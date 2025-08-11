@@ -2,7 +2,7 @@ from django import forms
 
 
 class ContactForm(forms.Form):
-    """Form liên hệ"""
+    """Form liên hệ."""
     name = forms.CharField(
         label='',
         max_length=100,
@@ -44,15 +44,15 @@ class ContactForm(forms.Form):
     )
     
     def clean_name(self):
-        """Validate name field"""
+        """Validate name field."""
         name = self.cleaned_data.get('name')
         if len(name) < 2:
             raise forms.ValidationError('Tên phải có ít nhất 2 ký tự.')
         return name
     
     def clean_message(self):
-        """Validate message field"""
+        """Validate message field."""
         message = self.cleaned_data.get('message')
         if len(message) < 10:
             raise forms.ValidationError('Nội dung tin nhắn phải có ít nhất 10 ký tự.')
-        return message 
+        return message

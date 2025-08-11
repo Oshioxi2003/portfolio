@@ -1,17 +1,15 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.core.paginator import Paginator
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.db.models import Q
-from .models import Profile, Course, BlogPost, PodcastEpisode, ContactMessage
+from django.shortcuts import get_object_or_404, redirect, render
+
 from .forms import ContactForm
+from .models import BlogPost, ContactMessage, Course, PodcastEpisode, Profile, Category
 
 
 def home_view(request):
-    """Trang Home với profile và thống kê"""
-    try:
-        profile = Profile.objects.first()
-    except Profile.DoesNotExist:
-        profile = None
+    """Trang Home với profile và thống kê."""
+    profile = Profile.objects.first()
     
     # Lấy một số items nổi bật
     featured_courses = Course.objects.filter(featured=True, is_active=True)[:3]
@@ -28,11 +26,8 @@ def home_view(request):
 
 
 def about_view(request):
-    """Trang About với thông tin cá nhân chi tiết"""
-    try:
-        profile = Profile.objects.first()
-    except Profile.DoesNotExist:
-        profile = None
+    """Trang About với thông tin cá nhân chi tiết."""
+    profile = Profile.objects.first()
     
     context = {
         'profile': profile,
@@ -41,42 +36,67 @@ def about_view(request):
 
 
 def courses_view(request):
-    """Trang danh sách khóa học"""
-    courses = Course.objects.filter(is_active=True).order_by('-featured', '-created_at')
+    """Trang danh sách projects."""
+    projects = Course.objects.filter(is_active=True).order_by('-featured', '-created_at')
+    
+    # Lọc theo category
+    category_slug = request.GET.get('category')
+    if category_slug:
+        projects = projects.filter(category__slug=category_slug)
     
     # Lọc theo level nếu có
     level = request.GET.get('level')
     if level:
-        courses = courses.filter(level=level)
+        projects = projects.filter(level=level)
+    
+    # Lọc theo technology
+    tech = request.GET.get('tech')
+    if tech:
+        projects = projects.filter(technologies__icontains=tech)
     
     # Phân trang
-    paginator = Paginator(courses, 9)  # 9 courses per page
+    paginator = Paginator(projects, 9)  # 9 projects per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    
+    # Lấy categories để hiển thị filter
+    categories = Category.objects.filter(is_active=True)
+    
+    # Lấy tất cả technologies để hiển thị filter
+    all_projects = Course.objects.filter(is_active=True).exclude(technologies='')
+    all_technologies = set()
+    for project in all_projects:
+        all_technologies.update(project.get_technologies_list())
     
     context = {
         'page_obj': page_obj,
         'current_level': level,
+        'current_category': category_slug,
+        'current_tech': tech,
+        'categories': categories,
+        'technologies': sorted(all_technologies),
     }
     return render(request, 'portfolio/courses.html', context)
 
 
 def course_detail_view(request, slug):
-    """Trang chi tiết khóa học"""
-    course = get_object_or_404(Course, slug=slug, is_active=True)
-    related_courses = Course.objects.filter(
-        is_active=True, level=course.level
-    ).exclude(id=course.id)[:3]
+    """Trang chi tiết project."""
+    project = get_object_or_404(Course, slug=slug, is_active=True)
+    related_projects = Course.objects.filter(
+        is_active=True, category=project.category
+    ).exclude(id=project.id)[:3]
     
     context = {
-        'course': course,
-        'related_courses': related_courses,
+        'course': project,  # Giữ tên 'course' để không phải đổi template
+        'project': project,
+        'related_courses': related_projects,
+        'related_projects': related_projects,
     }
     return render(request, 'portfolio/course_detail.html', context)
 
 
 def blog_view(request):
-    """Trang blog với filter và search"""
+    """Trang blog với filter và search."""
     posts = BlogPost.objects.filter(is_published=True)
     
     # Tìm kiếm
@@ -99,11 +119,10 @@ def blog_view(request):
     page_obj = paginator.get_page(page_number)
     
     # Lấy tất cả tags để hiển thị filter
-    all_posts = BlogPost.objects.filter(is_published=True)
+    all_posts = BlogPost.objects.filter(is_published=True).exclude(tags='')
     all_tags = set()
     for post in all_posts:
-        tags = post.get_tags_list()
-        all_tags.update(tags)
+        all_tags.update(post.get_tags_list())
     
     context = {
         'page_obj': page_obj,
@@ -116,7 +135,7 @@ def blog_view(request):
 
 
 def blog_detail_view(request, slug):
-    """Trang chi tiết bài viết"""
+    """Trang chi tiết bài viết."""
     post = get_object_or_404(BlogPost, slug=slug, is_published=True)
     related_posts = BlogPost.objects.filter(
         is_published=True
@@ -130,7 +149,7 @@ def blog_detail_view(request, slug):
 
 
 def podcast_view(request):
-    """Trang podcast episodes"""
+    """Trang podcast episodes."""
     episodes = PodcastEpisode.objects.filter(is_published=True)
     
     # Lọc theo season
@@ -158,7 +177,7 @@ def podcast_view(request):
 
 
 def podcast_detail_view(request, slug):
-    """Trang chi tiết podcast episode"""
+    """Trang chi tiết podcast episode."""
     episode = get_object_or_404(PodcastEpisode, slug=slug, is_published=True)
     related_episodes = PodcastEpisode.objects.filter(
         is_published=True, season=episode.season
@@ -172,7 +191,7 @@ def podcast_detail_view(request, slug):
 
 
 def contact_view(request):
-    """Trang liên hệ với form"""
+    """Trang liên hệ với form."""
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -189,10 +208,7 @@ def contact_view(request):
         form = ContactForm()
     
     # Lấy thông tin profile để hiển thị thông tin liên hệ
-    try:
-        profile = Profile.objects.first()
-    except Profile.DoesNotExist:
-        profile = None
+    profile = Profile.objects.first()
     
     context = {
         'form': form,

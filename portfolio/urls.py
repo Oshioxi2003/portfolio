@@ -22,4 +22,4 @@ urlpatterns = [
     
     # Contact
     path('contact/', views.contact_view, name='contact'),
-] 
+]

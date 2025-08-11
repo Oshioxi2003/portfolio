@@ -3,53 +3,962 @@
 {% block title %}{{ course.title }} - Portfolio{% endblock %}
 
 {% block content %}
-<div class="container section-padding">
-    <div class="row">
-        <div class="col-lg-8">
-            <h1 class="display-6 fw-bold mb-3">{{ course.title }}</h1>
-            
-            {% if course.thumbnail %}
-                <img src="{{ course.thumbnail }}" alt="{{ course.title }}" class="img-fluid rounded mb-4">
-            {% else %}
-                <img src="https://placehold.co/800x400/1e1e1e/ffb400?text=PROJECT" alt="{{ course.title }}" class="img-fluid rounded mb-4">
-            {% endif %}
-            
-            <p class="lead">{{ course.description }}</p>
-            
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <strong>Cấp độ:</strong> {{ course.get_level_display }}
+<section class="hero-section">
+    <div class="container">
+        <!-- Back Button -->
+        <div class="back-nav mb-4 animate-slide-down">
+            <a href="{% url 'courses' %}" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left me-2"></i>Back to Projects
+            </a>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="row align-items-center">
+            <div class="col-lg-6 animate-slide-left">
+                <div class="project-badge">
+                    {% if course.featured %}
+                        <span class="badge badge-featured">
+                            <i class="fas fa-star me-1"></i>Featured Project
+                        </span>
+                    {% endif %}
+                    {% if course.completed %}
+                        <span class="badge badge-completed">
+                            <i class="fas fa-check-circle me-1"></i>Completed
+                        </span>
+                    {% else %}
+                        <span class="badge badge-development">
+                            <i class="fas fa-code me-1"></i>In Development
+                        </span>
+                    {% endif %}
                 </div>
-                <div class="col-md-6">
-                    <strong>Thời lượng:</strong> {{ course.duration|default:"Chưa cập nhật" }}
+
+                <h1 class="hero-title">{{ course.title }}</h1>
+                
+                <div class="category-info">
+                    <span class="category-badge">
+                        <style>
+                            .category-badge {
+                                background-color: {{ course.category.color }} ;
+                            }
+                        </style>
+                        {% if course.category.icon %}<i class="{{ course.category.icon }} me-1"></i>{% endif %}
+                        {{ course.category.name }}
+                    </span>
+                </div>
+
+                <p class="hero-description">{{ course.description }}</p>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    {% if course.demo_url %}
+                        <a href="{{ course.demo_url }}" target="_blank" class="btn btn-primary btn-glow">
+                            <i class="fas fa-external-link-alt me-2"></i>Live Demo
+                        </a>
+                    {% endif %}
+                    {% if course.github_url %}
+                        <a href="{{ course.github_url }}" target="_blank" class="btn btn-outline-primary">
+                            <i class="fab fa-github me-2"></i>Source Code
+                        </a>
+                    {% endif %}
+                    {% if course.project_url %}
+                        <a href="{{ course.project_url }}" target="_blank" class="btn btn-outline-secondary">
+                            <i class="fas fa-link me-2"></i>Project Link
+                        </a>
+                    {% endif %}
                 </div>
             </div>
-            
-            {% if course.course_url %}
-                <a href="{{ course.course_url }}" target="_blank" class="btn btn-primary btn-lg">
-                    {% if course.enrollment_required %}Đăng ký khóa học{% else %}Xem khóa học{% endif %}
-                </a>
+
+            <div class="col-lg-6 animate-slide-right">
+                <div class="project-image-container">
+            {% if course.thumbnail %}
+                        <img src="{{ course.thumbnail }}" alt="{{ course.title }}" class="project-image">
+            {% else %}
+                        <div class="placeholder-image">
+                            <i class="fas fa-code fa-4x"></i>
+                            <p>{{ course.title }}</p>
+                        </div>
             {% endif %}
-        </div>
-        
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Thông tin khóa học</h5>
-                    <p><strong>Giá:</strong> 
-                        {% if course.price > 0 %}
-                            ${{ course.price }}
-                        {% else %}
-                            Miễn phí
-                        {% endif %}
-                    </p>
-                    <p><strong>Cấp độ:</strong> {{ course.get_level_display }}</p>
-                    {% if course.duration %}
-                        <p><strong>Thời lượng:</strong> {{ course.duration }}</p>
-                    {% endif %}
+                    <div class="image-overlay"></div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Project Details Section -->
+<section class="details-section">
+    <div class="container">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Technologies Used -->
+                {% if course.technologies %}
+                <div class="detail-card animate-fade-up">
+                    <h3 class="section-title">
+                        <i class="fas fa-tools me-2"></i>Technologies Used
+                    </h3>
+                    <div class="tech-stack">
+                        {% for tech in course.get_technologies_list %}
+                            <span class="tech-tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Project Information -->
+                <div class="detail-card animate-fade-up">
+                    <h3 class="section-title">
+                        <i class="fas fa-info-circle me-2"></i>Project Information
+                    </h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-signal text-primary"></i>
+                            <div>
+                                <h5>Difficulty Level</h5>
+                                <p>{{ course.get_level_display }}</p>
+                            </div>
+                        </div>
+                        {% if course.duration %}
+                        <div class="info-item">
+                            <i class="fas fa-clock text-success"></i>
+                            <div>
+                                <h5>Development Time</h5>
+                                <p>{{ course.duration }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="info-item">
+                            <i class="fas fa-calendar text-warning"></i>
+                            <div>
+                                <h5>Created</h5>
+                                <p>{{ course.created_at|date:"F Y" }}</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-sync text-info"></i>
+                            <div>
+                                <h5>Last Updated</h5>
+                                <p>{{ course.updated_at|date:"M d, Y" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Project Status Card -->
+                <div class="sidebar-card animate-fade-up">
+                    <div class="card-header">
+                        <h4><i class="fas fa-chart-line me-2"></i>Project Status</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="status-indicator">
+                            {% if course.completed %}
+                                <div class="status-complete">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                    <h5>Completed</h5>
+                                    <p>This project is fully developed and deployed.</p>
+                                </div>
+                            {% else %}
+                                <div class="status-development">
+                                    <i class="fas fa-code fa-2x"></i>
+                                    <h5>In Development</h5>
+                                    <p>This project is currently being developed.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-card animate-fade-up">
+                    <div class="card-header">
+                        <h4><i class="fas fa-link me-2"></i>Quick Actions</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="quick-actions">
+                            {% if course.demo_url %}
+                            <a href="{{ course.demo_url }}" target="_blank" class="action-link demo">
+                                <i class="fas fa-eye"></i>
+                                <span>View Live Demo</span>
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            {% endif %}
+                            {% if course.github_url %}
+                            <a href="{{ course.github_url }}" target="_blank" class="action-link github">
+                                <i class="fab fa-github"></i>
+                                <span>View Source Code</span>
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            {% endif %}
+                            {% if course.project_url %}
+                            <a href="{{ course.project_url }}" target="_blank" class="action-link project">
+                                <i class="fas fa-link"></i>
+                                <span>Visit Project</span>
+                                <i class="fas fa-external-link-alt"></i>
+                </a>
+            {% endif %}
+                        </div>
+                    </div>
+        </div>
+        
+                <!-- Category Info -->
+                <div class="sidebar-card animate-fade-up">
+                    <div class="card-header">
+                        <h4><i class="fas fa-tag me-2"></i>Category</h4>
+                    </div>
+                <div class="card-body">
+                        <div class="category-detail">
+                            <div class="category-icon">
+                                <style>
+                                    .category-icon {
+                                        background-color: {{ course.category.color }} !important;
+                                    }
+                                </style>
+                                {% if course.category.icon %}<i class="{{ course.category.icon }}"></i>{% endif %}
+                            </div>
+                            <div class="category-content">
+                                <h5>{{ course.category.name }}</h5>
+                                {% if course.category.description %}
+                                    <p>{{ course.category.description }}</p>
+                                {% endif %}
+                                <a href="{% url 'courses' %}?category={{ course.category.slug }}" class="view-more">
+                                    View more {{ course.category.name|lower }} projects →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Projects -->
+{% if related_courses %}
+<section class="related-section">
+    <div class="container">
+        <h2 class="text-center mb-5 animate-fade-up">
+            <i class="fas fa-project-diagram me-2"></i>Related Projects
+        </h2>
+        <div class="row">
+            {% for related in related_courses %}
+            <div class="col-md-4 mb-4">
+                <div class="related-card animate-scale-up">
+                    <div class="related-image">
+                        {% if related.thumbnail %}
+                            <img src="{{ related.thumbnail }}" alt="{{ related.title }}">
+                        {% else %}
+                            <div class="related-placeholder">
+                                <i class="fas fa-code"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="related-content">
+                        <h5>{{ related.title }}</h5>
+                        <p>{{ related.description|truncatewords:10 }}</p>
+                        <a href="{% url 'course_detail' related.slug %}" class="btn btn-sm btn-outline-primary">
+                            View Project <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Variables */
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --dark-bg: #1a1a1a;
+        --card-bg: #2a2a2a;
+        --text-light: #f8f9fa;
+        --shadow-light: 0 10px 30px rgba(0, 0, 0, 0.1);
+        --shadow-dark: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: var(--primary-gradient);
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        padding: 60px 0;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.1;
+        pointer-events: none;
+    }
+
+    .back-nav {
+        position: relative;
+        z-index: 10;
+    }
+
+    .hero-section .container {
+        position: relative;
+        z-index: 5;
+    }
+
+    .project-badge {
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 5;
+    }
+
+    .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-weight: 600;
+        margin-right: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        position: relative;
+        z-index: 5;
+    }
+
+    .badge-featured {
+        background: var(--secondary-gradient);
+        color: white;
+    }
+
+    .badge-completed {
+        background: var(--success-gradient);
+        color: white;
+    }
+
+    .badge-development {
+        background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+        color: #2d3436;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 5;
+    }
+
+    .category-info {
+        margin-bottom: 1.5rem;
+        position: relative;
+        z-index: 5;
+    }
+
+    .category-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        color: white;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: var(--shadow-dark);
+        position: relative;
+        z-index: 5;
+    }
+
+    .hero-description {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+        position: relative;
+        z-index: 5;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        position: relative;
+        z-index: 10;
+    }
+
+    .action-buttons .btn {
+        position: relative;
+        z-index: 10;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-glow {
+        box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+        animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+        0% { box-shadow: 0 0 20px rgba(0, 123, 255, 0.5); }
+        50% { box-shadow: 0 0 30px rgba(0, 123, 255, 0.8); }
+        100% { box-shadow: 0 0 20px rgba(0, 123, 255, 0.5); }
+    }
+
+    /* Project Image */
+    .project-image-container {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow-dark);
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .project-image {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .project-image:hover {
+        transform: scale(1.05);
+    }
+
+    .placeholder-image {
+        width: 100%;
+        height: 400px;
+        background: var(--secondary-gradient);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        pointer-events: none;
+    }
+
+    /* Details Section */
+    .details-section {
+        padding: 80px 0;
+        background: var(--dark-bg);
+        color: var(--text-light);
+    }
+
+    .detail-card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-dark);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .detail-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .section-title {
+        color: #fff;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Tech Stack */
+    .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .tech-tag {
+        background: var(--primary-gradient);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition: transform 0.3s ease;
+    }
+
+    .tech-tag:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Info Grid */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        transition: background 0.3s ease;
+    }
+
+    .info-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .info-item i {
+        font-size: 1.5rem;
+    }
+
+    .info-item h5 {
+        margin: 0;
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .info-item p {
+        margin: 0;
+        color: #ccc;
+        font-size: 0.85rem;
+    }
+
+    /* Sidebar */
+    .sidebar-card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        overflow: hidden;
+        box-shadow: var(--shadow-dark);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .sidebar-card .card-header {
+        background: var(--primary-gradient);
+        color: white;
+        padding: 1rem 1.5rem;
+        border: none;
+    }
+
+    .sidebar-card .card-header h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .sidebar-card .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Status Indicator */
+    .status-indicator {
+        text-align: center;
+    }
+
+    .status-complete {
+        color: #28a745;
+    }
+
+    .status-development {
+        color: #ffc107;
+    }
+
+    .status-indicator h5 {
+        margin: 0.5rem 0;
+        color: inherit;
+    }
+
+    .status-indicator p {
+        color: #ccc;
+        font-size: 0.9rem;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .action-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        color: #fff;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .action-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        transform: translateX(5px);
+    }
+
+    .action-link.demo:hover {
+        background: rgba(0, 123, 255, 0.2);
+    }
+
+    .action-link.github:hover {
+        background: rgba(108, 117, 125, 0.2);
+    }
+
+    .action-link.project:hover {
+        background: rgba(40, 167, 69, 0.2);
+    }
+
+    /* Category Detail */
+    .category-detail {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .category-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .category-content h5 {
+        margin: 0 0 0.5rem 0;
+        color: #fff;
+    }
+
+    .category-content p {
+        color: #ccc;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .view-more {
+        color: var(--bs-primary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: color 0.3s ease;
+    }
+
+    .view-more:hover {
+        color: #fff;
+    }
+
+    /* Related Projects */
+    .related-section {
+        padding: 80px 0;
+        background: #111;
+    }
+
+    .related-card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+    }
+
+    .related-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-dark);
+    }
+
+    .related-image {
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .related-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .related-card:hover .related-image img {
+        transform: scale(1.1);
+    }
+
+    .related-placeholder {
+        height: 100%;
+        background: var(--primary-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .related-content {
+        padding: 1.5rem;
+        color: #fff;
+    }
+
+    .related-content h5 {
+        margin-bottom: 0.75rem;
+        color: #fff;
+    }
+
+    .related-content p {
+        color: #ccc;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Animations */
+    .animate-slide-left {
+        animation: slideLeft 1s ease-out;
+    }
+
+    .animate-slide-right {
+        animation: slideRight 1s ease-out;
+    }
+
+    .animate-slide-down {
+        animation: slideDown 0.8s ease-out;
+    }
+
+    .animate-fade-up {
+        animation: fadeUp 0.8s ease-out;
+    }
+
+    .animate-scale-up {
+        animation: scaleUp 0.6s ease-out;
+    }
+
+    @keyframes slideLeft {
+        from { transform: translateX(-100px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideRight {
+        from { transform: translateX(100px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideDown {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeUp {
+        from { transform: translateY(30px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes scaleUp {
+        from { transform: scale(0.9); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .hero-title {
+            font-size: 3rem;
+        }
+        
+        .project-image-container {
+            margin-top: 2rem;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .hero-section {
+            min-height: 60vh;
+            padding: 40px 0;
+        }
+        
+        .hero-title {
+            font-size: 2.8rem;
+        }
+        
+        .project-image-container {
+            height: 350px;
+        }
+        
+        .project-image, .placeholder-image {
+            height: 350px;
+        }
+        
+        .info-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-section {
+            min-height: 50vh;
+            padding: 30px 0;
+        }
+        
+        .hero-title {
+            font-size: 2.2rem;
+            text-align: center;
+        }
+        
+        .hero-description {
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        .action-buttons {
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        
+        .project-image-container {
+            height: 250px;
+            margin-top: 2rem;
+        }
+        
+        .project-image, .placeholder-image {
+            height: 250px;
+        }
+        
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .category-detail {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .details-section {
+            padding: 40px 0;
+        }
+        
+        .related-section {
+            padding: 40px 0;
+        }
+        
+        .project-badge {
+            text-align: center;
+        }
+        
+        .category-info {
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-title {
+            font-size: 1.8rem;
+        }
+        
+        .hero-description {
+            font-size: 1rem;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .action-buttons .btn {
+            min-width: 200px;
+        }
+        
+        .project-image-container {
+            height: 200px;
+        }
+        
+        .project-image, .placeholder-image {
+            height: 200px;
+        }
+        
+        .detail-card, .sidebar-card {
+            margin-bottom: 1rem;
+            padding: 1rem;
+        }
+        
+        .quick-actions .action-link {
+            padding: 0.75rem;
+        }
+        
+        .tech-stack {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-section {
+            padding: 20px 0;
+        }
+        
+        .hero-title {
+            font-size: 1.6rem;
+        }
+        
+        .back-nav {
+            margin-bottom: 1rem;
+        }
+        
+        .badge {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+        }
+        
+        .category-badge {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+        }
+        
+        .action-buttons .btn {
+            min-width: 180px;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Dark mode enhancements */
+    body.dark-mode .detail-card {
+        background: var(--card-bg);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    body.dark-mode .sidebar-card {
+        background: var(--card-bg);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+</style>
 {% endblock %} 

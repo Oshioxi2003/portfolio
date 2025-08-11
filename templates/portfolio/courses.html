@@ -15,21 +15,17 @@
         <!-- Filter Buttons -->
         <div class="text-center mb-5">
             <div class="d-flex justify-content-center flex-wrap gap-3">
-                <a href="{% url 'courses' %}" class="btn {% if not current_level %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+                <a href="{% url 'courses' %}" class="btn {% if not current_category %}btn-primary{% else %}btn-outline-secondary{% endif %}">
                     ALL
                 </a>
-                <a href="?level=beginner" class="btn {% if current_level == 'beginner' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
-                    HTML/CSS/JAVASCRIPT
+                {% for category in categories %}
+                <a href="?category={{ category.slug }}" 
+                   class="btn {% if current_category == category.slug %}btn-primary{% else %}btn-outline-secondary{% endif %}"
+                   style="{% if current_category == category.slug %}background-color: {{ category.color }}; border-color: {{ category.color }};{% endif %}">
+                    {% if category.icon %}<i class="{{ category.icon }} me-1"></i>{% endif %}
+                    {{ category.name|upper }}
                 </a>
-                <a href="?level=intermediate" class="btn {% if current_level == 'intermediate' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
-                    THYMELEAF
-                </a>
-                <a href="?level=advanced" class="btn {% if current_level == 'advanced' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
-                    NEXTJS/REACTJS/TAILWIND
-                </a>
-                <a href="?level=api" class="btn {% if current_level == 'api' %}btn-primary{% else %}btn-outline-secondary{% endif %}">
-                    API
-                </a>
+                {% endfor %}
             </div>
         </div>
 

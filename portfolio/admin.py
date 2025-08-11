@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Course, BlogPost, PodcastEpisode, ContactMessage
+from .models import Profile, Course, BlogPost, PodcastEpisode, ContactMessage, Category
 
 
 @admin.register(Profile)
@@ -27,21 +27,50 @@ class ProfileAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(Course)
-class CourseAdmin(admin.ModelAdmin):
-    list_display = ['title', 'level', 'price', 'is_active', 'featured', 'created_at']
-    list_filter = ['level', 'is_active', 'featured', 'created_at']
-    search_fields = ['title', 'description']
-    prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ['created_at', 'updated_at']
-    list_editable = ['is_active', 'featured']
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug', 'is_active', 'created_at']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['name', 'description']
+    prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ['created_at']
+    list_editable = ['is_active']
     
     fieldsets = (
         ('Thông tin cơ bản', {
-            'fields': ('title', 'slug', 'description', 'thumbnail', 'icon')
+            'fields': ('name', 'slug', 'description')
         }),
-        ('Chi tiết khóa học', {
-            'fields': ('duration', 'level', 'price', 'course_url', 'enrollment_required')
+        ('Giao diện', {
+            'fields': ('icon', 'color')
+        }),
+        ('Trạng thái', {
+            'fields': ('is_active',)
+        }),
+        ('Thời gian', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ['title', 'category', 'level', 'completed', 'is_active', 'featured', 'created_at']
+    list_filter = ['category', 'level', 'completed', 'is_active', 'featured', 'created_at']
+    search_fields = ['title', 'description', 'technologies']
+    prepopulated_fields = {'slug': ('title',)}
+    readonly_fields = ['created_at', 'updated_at']
+    list_editable = ['is_active', 'featured', 'completed']
+    
+    fieldsets = (
+        ('Thông tin cơ bản', {
+            'fields': ('title', 'slug', 'description', 'thumbnail', 'icon', 'category')
+        }),
+        ('Chi tiết project', {
+            'fields': ('technologies', 'duration', 'level', 'completed')
+        }),
+        ('Links', {
+            'fields': ('github_url', 'demo_url', 'project_url')
         }),
         ('Trạng thái', {
             'fields': ('is_active', 'featured')
