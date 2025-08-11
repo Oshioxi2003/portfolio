@@ -28,15 +28,27 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-=)*c8i9sroi6l!e+9hct!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
+# Cải thiện ALLOWED_HOSTS configuration
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS', 
-    default='localhost,127.0.0.1,0.0.0.0,*.herokuapp.com', 
-    cast=lambda v: [s.strip() for s in v.split(',')]
+    default='*',  # Cho phép tất cả hosts trong development
+    cast=lambda v: [s.strip() for s in v.split(',') if s.strip()]
 )
+
+# Hoặc nếu muốn cụ thể hơn trong development:
+if DEBUG:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '*']
+else:
+    ALLOWED_HOSTS = config(
+        'ALLOWED_HOSTS', 
+        default='*.herokuapp.com,*.render.com',
+        cast=lambda v: [s.strip() for s in v.split(',') if s.strip()]
+    )
+
 CSRF_TRUSTED_ORIGINS = config(
     "CSRF_TRUSTED_ORIGINS",
-    default="https://*.herokuapp.com",
-    cast=lambda v: [s.strip() for s in v.split(",")]
+    default="https://*.herokuapp.com,http://localhost:8000,http://127.0.0.1:8000",
+    cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
 )
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
@@ -91,44 +103,21 @@ WSGI_APPLICATION = 'portfolio_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Database configuration for different environments
-import dj_database_url
-
-# Check for Heroku DATABASE_URL first (for production)
-DATABASE_URL = config('DATABASE_URL', default=None)
-
-if DATABASE_URL:
-    # Heroku PostgreSQL database
-    DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL)
+# Database configuration - MSSQL Azure SQL Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'mssql',
+        'NAME': config('MSSQL_DATABASE', default='dehmbtpua8bgw84'),
+        'USER': config('MSSQL_USER', default='ugoxdlf1k4otkz2'),
+        'PASSWORD': config('MSSQL_PASSWORD', default='i3HW?WLMRX5&#VH3TlDYEZ@gi'),
+        'HOST': config('MSSQL_HOST', default='eu-az-sql-serv1.database.windows.net'),
+        'PORT': config('MSSQL_PORT', default='1433'),
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+            'extra_params': 'Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;MultipleActiveResultSets=False;Persist Security Info=False;',
+        },
     }
-else:
-    # Check for MSSQL configuration (for Azure or custom setup)
-    MSSQL_NAME = config('MSSQL_DATABASE', default=None)
-    
-    if MSSQL_NAME:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'mssql',
-                'NAME': MSSQL_NAME,
-                'USER': config('MSSQL_USER', default=''),
-                'PASSWORD': config('MSSQL_PASSWORD', default=''),
-                'HOST': config('MSSQL_HOST', default=''),
-                'PORT': config('MSSQL_PORT', default='1433'),
-                'OPTIONS': {
-                    'driver': 'ODBC Driver 17 for SQL Server',
-                    'extra_params': 'Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;',
-                },
-            }
-        }
-    else:
-        # Default to SQLite for local development
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': BASE_DIR / 'db.sqlite3',
-            }
-        }
+}
 
 
 
