@@ -1,0 +1,25 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a//dev/null b/.gitignore
+index 0000000000000000000000000000000000000000..b262b8aa40267273a09218d623f8d77fbe40b053 100644
+--- a//dev/null
++++ b/.gitignore
+@@ -0,0 +1,16 @@
++# Byte-compiled / optimized / DLL files
++__pycache__/
++*.py[cod]
++
++# Django files
++*.log
++db.sqlite3
++media/*
++!media/.gitkeep
++staticfiles/
++
++# Environment
++.env
++
++# Others
++*.sqlite3
+ 
+EOF
+)
