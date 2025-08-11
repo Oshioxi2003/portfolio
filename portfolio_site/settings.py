@@ -103,21 +103,33 @@ WSGI_APPLICATION = 'portfolio_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Database configuration - MSSQL Azure SQL Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'mssql',
-        'NAME': config('MSSQL_DATABASE', default='dehmbtpua8bgw84'),
-        'USER': config('MSSQL_USER', default='ugoxdlf1k4otkz2'),
-        'PASSWORD': config('MSSQL_PASSWORD', default='i3HW?WLMRX5&#VH3TlDYEZ@gi'),
-        'HOST': config('MSSQL_HOST', default='eu-az-sql-serv1.database.windows.net'),
-        'PORT': config('MSSQL_PORT', default='1433'),
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
-            'extra_params': 'Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;MultipleActiveResultSets=False;Persist Security Info=False;',
-        },
+# Database configuration for different environments
+import dj_database_url
+
+# Check for Heroku DATABASE_URL first (for Heroku deployment)
+DATABASE_URL = config('DATABASE_URL', default=None)
+
+if DATABASE_URL:
+    # Heroku PostgreSQL database
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
     }
-}
+else:
+    # Use MSSQL for other environments (local development, Azure, etc.)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'mssql',
+            'NAME': config('MSSQL_DATABASE', default='dehmbtpua8bgw84'),
+            'USER': config('MSSQL_USER', default='ugoxdlf1k4otkz2'),
+            'PASSWORD': config('MSSQL_PASSWORD', default='i3HW?WLMRX5&#VH3TlDYEZ@gi'),
+            'HOST': config('MSSQL_HOST', default='eu-az-sql-serv1.database.windows.net'),
+            'PORT': config('MSSQL_PORT', default='1433'),
+            'OPTIONS': {
+                'driver': 'ODBC Driver 17 for SQL Server',
+                'extra_params': 'Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;MultipleActiveResultSets=False;Persist Security Info=False;',
+            },
+        }
+    }
 
 
 
