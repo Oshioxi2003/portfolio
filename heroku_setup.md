@@ -1,5 +1,12 @@
 # Hướng dẫn triển khai Django Portfolio lên Heroku
 
+## ⚠️ Lưu ý quan trọng về Dependencies
+
+**Vấn đề đã fix:**
+- ✅ Slug size quá lớn (3GB -> ~50MB)  
+- ✅ Runtime.txt deprecated
+- ✅ Loại bỏ PyTorch, OpenAI Whisper và các ML libraries không cần thiết
+
 ## 1. Cài đặt Heroku CLI
 
 Tải và cài đặt Heroku CLI từ: https://devcenter.heroku.com/articles/heroku-cli
@@ -87,6 +94,13 @@ heroku logs --tail
 4. **Media Files**: Để upload files, bạn cần cấu hình AWS S3 hoặc Cloudinary
 
 5. **CORS**: Cập nhật CORS_ALLOWED_ORIGINS trong settings.py nếu cần
+
+6. **Dependencies đã tối ưu**: 
+   - Loại bỏ PyTorch (865MB) và OpenAI Whisper
+   - Loại bỏ các ML libraries không cần thiết
+   - Slug size giảm từ 3GB xuống ~50MB
+
+7. **Python Version**: Sử dụng `.python-version` thay vì `runtime.txt`
 
 ## Troubleshooting:
 
