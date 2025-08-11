@@ -1,0 +1,6 @@
+# Exclude unnecessary files from the slug
+*.md
+db.sqlite3
+django.log
+media/
+MSSQL_SETUP_GUIDE.md
