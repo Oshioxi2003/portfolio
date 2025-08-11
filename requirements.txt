@@ -24,7 +24,7 @@ openai-whisper==20240930
 packaging==25.0
 Pillow==10.1.0
 PyJWT==2.10.1
-pyodbc==5.2.0
+psycopg2-binary==2.9.7
 python-decouple==3.8
 pytz==2025.2
 regex==2024.11.6

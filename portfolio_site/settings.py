@@ -30,7 +30,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS', 
-    default='localhost,127.0.0.1,0.0.0.0', 
+    default='localhost,127.0.0.1,0.0.0.0,*.herokuapp.com', 
     cast=lambda v: [s.strip() for s in v.split(',')]
 )
 CSRF_TRUSTED_ORIGINS = config(
@@ -91,31 +91,44 @@ WSGI_APPLICATION = 'portfolio_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Check if we're on Heroku (production) or local development
-MSSQL_NAME = config('MSSQL_DATABASE', default=None)
+# Database configuration for different environments
+import dj_database_url
 
-if MSSQL_NAME:
+# Check for Heroku DATABASE_URL first (for production)
+DATABASE_URL = config('DATABASE_URL', default=None)
+
+if DATABASE_URL:
+    # Heroku PostgreSQL database
     DATABASES = {
-        'default': {
-            'ENGINE': 'mssql',
-            'NAME': MSSQL_NAME,
-            'USER': config('MSSQL_USER', default=''),
-            'PASSWORD': config('MSSQL_PASSWORD', default=''),
-            'HOST': config('MSSQL_HOST', default=''),
-            'PORT': config('MSSQL_PORT', default='1433'),
-            'OPTIONS': {
-                'driver': 'ODBC Driver 17 for SQL Server',
-                'extra_params': 'Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;',
-            },
-        }
+        'default': dj_database_url.parse(DATABASE_URL)
     }
 else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+    # Check for MSSQL configuration (for Azure or custom setup)
+    MSSQL_NAME = config('MSSQL_DATABASE', default=None)
+    
+    if MSSQL_NAME:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'mssql',
+                'NAME': MSSQL_NAME,
+                'USER': config('MSSQL_USER', default=''),
+                'PASSWORD': config('MSSQL_PASSWORD', default=''),
+                'HOST': config('MSSQL_HOST', default=''),
+                'PORT': config('MSSQL_PORT', default='1433'),
+                'OPTIONS': {
+                    'driver': 'ODBC Driver 17 for SQL Server',
+                    'extra_params': 'Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;',
+                },
+            }
         }
-    }
+    else:
+        # Default to SQLite for local development
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 
 
 
