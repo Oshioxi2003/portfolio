@@ -92,18 +92,28 @@ WSGI_APPLICATION = 'portfolio_site.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 # Check if we're on Heroku (production) or local development
-DATABASES = {
+MSSQL_NAME = config('MSSQL_DATABASE', default=None)
+
+if MSSQL_NAME:
+    DATABASES = {
         'default': {
             'ENGINE': 'mssql',
-            'NAME': config('MSSQL_DATABASE'),
-            'USER': config('MSSQL_USER'),
-            'PASSWORD': config('MSSQL_PASSWORD'),
-            'HOST': config('MSSQL_HOST'),
+            'NAME': MSSQL_NAME,
+            'USER': config('MSSQL_USER', default=''),
+            'PASSWORD': config('MSSQL_PASSWORD', default=''),
+            'HOST': config('MSSQL_HOST', default=''),
             'PORT': config('MSSQL_PORT', default='1433'),
             'OPTIONS': {
                 'driver': 'ODBC Driver 17 for SQL Server',
                 'extra_params': 'Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;',
             },
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
