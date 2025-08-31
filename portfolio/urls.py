@@ -22,4 +22,7 @@ urlpatterns = [
     
     # Contact
     path('contact/', views.contact_view, name='contact'),
+    
+    # CV Download
+    path('download-cv/', views.download_cv, name='download_cv'),
 ]

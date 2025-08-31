@@ -2,6 +2,10 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse, Http404
+from django.conf import settings
+import os
+import mimetypes
 
 from .forms import ContactForm
 from .models import BlogPost, ContactMessage, Course, PodcastEpisode, Profile, Category
@@ -215,3 +219,25 @@ def contact_view(request):
         'profile': profile,
     }
     return render(request, 'portfolio/contact.html', context)
+
+
+def download_cv(request):
+    """Download CV file."""
+    # Đường dẫn đến file CV
+    cv_path = os.path.join(settings.MEDIA_ROOT, 'profile', 'CV', 'DAO-HUY-TOAN-REACT-DEV-TA.pdf')
+    
+    # Kiểm tra file có tồn tại không
+    if not os.path.exists(cv_path):
+        raise Http404("CV file not found")
+    
+    # Xác định content type
+    content_type, _ = mimetypes.guess_type(cv_path)
+    if content_type is None:
+        content_type = 'application/pdf'
+    
+    # Đọc file và trả về response
+    with open(cv_path, 'rb') as cv_file:
+        response = HttpResponse(cv_file.read(), content_type=content_type)
+        response['Content-Disposition'] = 'attachment; filename="DAO-HUY-TOAN-REACT-DEV-TA.pdf"'
+        response['Content-Length'] = os.path.getsize(cv_path)
+        return response
